@@ -25,6 +25,44 @@
                     </button>
                 </div>
             </div>
+
+            <!-- This example requires Tailwind CSS v2.0+ -->
+            <div class="flex flex-col mt-10">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Última atualização</th>
+                                        <th scope="col" class="relative px-6 py-3">
+                                            <span class="sr-only">Edit</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(code, index) in this.trackingCodes" :key="index" :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ code }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        status
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        update
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <TruckIcon class="h-6 w-6" aria-hidden="true" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <modal :show="show"></modal>
@@ -35,26 +73,46 @@
 import Modal from '../Jetstream/Modal.vue'
 import AppLayout from '../Layouts/AppLayout.vue'
 import Sidebar from '../components/Sidebar.vue'
+import { TruckIcon }  from '@heroicons/vue/outline'
+
+const people = [
+  { name: 'Jane Cooper', title: 'Regional Paradigm Technician', role: 'Admin', email: 'jane.cooper@example.com' },
+  { name: 'Cody Fisher', title: 'Product Directives Officer', role: 'Owner', email: 'cody.fisher@example.com' },
+  // More people...
+]
 
 export default {
     props: ['index'],
     data() {
         return {
             show: false,
+            trackingCodes: [],
+            people
         }
     },
     components: {
         AppLayout,
         Modal,
-        Sidebar
+        Sidebar,
+        TruckIcon
     },
     methods: {
         registerCode() {
+            this.show = true
 
         },
         updateTable() {
+            axios.get(route('tracking.get')).then(response => {
+                let dataArr = response.data
 
+                dataArr.forEach(data => {
+                    this.trackingCodes.push(data.tracking_code)
+                });
+            })
         }
+    },
+    mounted() {
+        this.updateTable()
     }
 }
 </script>

@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/store', [IndexController::class, 'store'])->name('tracking.store');
 Route::get('/get', [IndexController::class, 'get'])->name('tracking.get');
 Route::get('/getSingle/{tracking_code}', [IndexController::class, 'getSingle'])->name('tracking.getSingle');
+Route::get('/fetchTrackingStatus/{tracking_code}', [IndexController::class, 'fetchTrackingStatus'])->name('tracking.fetchTrackingStatus');
